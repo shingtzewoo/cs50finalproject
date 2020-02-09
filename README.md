@@ -26,10 +26,18 @@ order in they appear and also level)
 - Home: displays your characters' stats and their current location
 
 Languages
-- Javascript, Python, HTML/CSS, SQL
+- JavaScript, Python, HTML/CSS, SQL
 
 Frameworks used:
 - Flask
+
+Code used from CS50:
+- Layout.html was used from CS50 library, except for the JavaScript code which was added by me to verify whether the user 
+has created a character.
+- Functions provided in the helpers.py such as apology and login_required
+
+Pictures:
+- Arrow.png and giphy.gif used in the project belong to their respective owners and I do not claim any right over them.
 
 Future works:
 - Game will be made more fun, and the battle system will be changed so it's not just based on luck.

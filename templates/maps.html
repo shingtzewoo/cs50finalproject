@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Map
+{% endblock %}
+
+{% block main %}
+
+    <h2>Map: Level<span>{% block level %} {% endblock %}</span></h2>
+
+    <section class="monster_marker">
+        <div id="left" style="cursor: pointer;">
+            <img src="/static/arrow.jpg">
+        </div>
+        <div class="mark"></div>
+        <div class="mark"></div>
+        <div class="mark"></div>
+        <div id="right" style="cursor: pointer;">
+            <img src="/static/arrow.jpg" class="rotateimg180">
+        </div>
+    </section>
+    <section class="monster_details">
+        <div class="monster_info">
+            <ul class="list-group">
+            {% block levela %}{% endblock %}
+            </ul>
+        </div>
+        <div class="monster_info">
+            <ul class="list-group">
+            {% block levelb %}{% endblock %}
+            </ul>
+        </div>
+        <div class="monster_info">
+            <ul class="list-group">
+            {% block levelc %}{% endblock %}
+            </ul>
+        </div>
+    </section>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // going to the next level using the right arrow
+        let pathname_r = get_pathname(window.location.href, paginate_right)
+
+        // going to the next level using the left arrow
+        let pathname_l = get_pathname(window.location.href, paginate_left)
+
+        document.getElementById('right').addEventListener('click', function () {
+            window.location.href = pathname_r;
+            console.log(pathname_r);
+        });
+
+        document.getElementById('left').addEventListener('click', function () {
+            window.location.href = pathname_l;
+            console.log(pathname_l);
+        });
+    })
+</script>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "maps.html" %}
+
+{% block level %}
+{{ n }}
+{% endblock %}
+
+
+{% block levela %}
+    {% for value in monsters[0] %}
+        {% if value is string %}
+            <li class="list-group-item">
+                Name: {{value}}
+               </li>
+        {% else %}
+            <li class="list-group-item">
+                HP: {{value}}
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block levelb %}
+    {% for value in monsters[1] %}
+        {% if value is string %}
+            <li class="list-group-item">
+                Name: {{value}}
+               </li>
+        {% else %}
+            <li class="list-group-item">
+                HP: {{value}}
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block levelc %}
+    {% for value in monsters[2] %}
+        {% if value is string %}
+            <li class="list-group-item">
+                Name: {{value}}
+               </li>
+        {% else %}
+            <li class="list-group-item">
+                HP: {{value}}
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

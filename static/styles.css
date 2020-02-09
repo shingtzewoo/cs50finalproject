@@ -1,0 +1,203 @@
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+/* colors for brand */
+nav .navbar-brand .black
+{
+    color: black;
+}
+nav .navbar-brand .grey
+{
+    color: grey;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+
+    display: grid;
+
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+.rotateimg180 {
+  -webkit-transform:rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+div > img {
+    width: 50px;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    border-radius: 10px;
+}
+
+.monster_marker {
+    width: 800px;
+    height: 180px;
+    justify-self: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.monster_details {
+    position: relative;
+    justify-self: center;
+    width: 800px;
+    height: 180px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mark {
+    height: 100px;
+    width: 100px;
+    border: 1px black solid;
+    display: inline-block;
+    border-radius: 100%;
+    margin: 40px;
+}
+
+.monster_info {
+    height: auto;
+    width: auto;
+    display: inline-block;
+    border: 1px black solid;
+    margin: 20px;
+}
+
+#left {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    position: relative;
+    justify-self: start;
+    align-self: center;
+}
+
+#right {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    position: relative;
+    justify-self: end;
+    align-self: center;
+}
+
+.battle_area {
+    display: grid;
+    grid-template-columns: 600px;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+                        "monster"
+                        "character"
+                        "results";
+    justify-self: center;
+}
+
+.monster {
+    grid-area: monster;
+    display: grid;
+    justify-items: end;
+    align-items: center;
+}
+
+#mon_box {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    margin: 2px;
+    color: red;
+}
+
+.monster-info {
+    width: auto;
+    height: auto;
+    border: 1px black solid;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.character {
+    grid-area: character;
+    display: grid;
+    justify-items: start;
+    align-items: center;
+}
+
+#char_box {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: black;
+    margin: 2px;
+    color: black;
+}
+
+.character-info {
+    width: auto;
+    height: auto;
+    border: 1px black solid;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.results {
+    grid-area: results;
+    margin-top: 10px;
+    display: grid;
+    width: auto;
+    height: auto;
+    justify-items: center;
+    align-items: center;
+}
+
+#results-info {
+    display: grid;
+    border: 1px black solid;
+    width: 600px;
+    height: 100px;
+    border-radius: 5px;
+    justify-items: center;
+    align-items: center;
+}
+
+#fire {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    background-color: black;
+}
+
+#fire > img {
+    width: 500px;
+    height: 500px;
+}

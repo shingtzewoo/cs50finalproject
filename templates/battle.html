@@ -1,0 +1,197 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Fight against {{ monster }}
+{% endblock %}
+
+{% block main %}
+<h2>Battle against <span style="color: grey;">{{ monster }}</span></h2>
+<section class="battle_area">
+    <section class="monster">
+        <section class="monster-info">
+            <ul class="list-group" id="monster_stats">
+                {% for dict in monsters_info %}
+                    {% for key, value in dict.items() %}
+                        {% if key == "hp" %}
+                            <li id="mon_hp" value="{{value}}" class="list-group-item">{{key.capitalize()}}: {{value}}</li>
+                        {% elif key == "name" %}
+                            <li class="list-group-item">{{ key.capitalize() }}: {{ value }} </li>
+                        {% else %}
+                            {{ continue }}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </section>
+        <div id="mon_box">m</div>
+        <form id="form1" name="form1">
+            <button name="mon_attack" id="mon_attack" class="attack" type="submit" style="display: none">Slash</button>
+        </form>
+    </section>
+    <section class="character">
+        <div id="char_box">c</div>
+        <form>
+            <button name="char_attack" id="char_attack" class="attack" type="submit">Attack</button>
+            <button name="{{ skill[0]["skill_name"] }}" id="skill" class ="skill">{{ skill[0]["skill_name"].capitalize() }}</button>
+        </form>
+        <section class="character-info">
+            <ul class="list-group list-group-horizontal">
+                {% for dict in character %}
+                    {% for key, value in dict.items() %}
+                        {% if key == "name" %}
+                            <li class="list-group-item">{{ value }}</li>
+                        {% else %}
+                            <li class="list-group-item" id="{{key}}" value="{{value}}">{{ key.capitalize() }}: {{ value }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </section>
+    </section>
+    <section class="results">
+        <div id="results-info">
+            <h3 id="char-results"></h3>
+            <h3 id="mon-results" style="color: red"></h3>
+        </div>
+    </section>
+</section>
+<script type="text/javascript" src="/static/script_2.js"></script>
+<script>
+    $(document).ready(function() {
+
+        let monster = "{{monster}}"
+
+        $("#form1").submit(function(event) {
+
+            event.preventDefault();
+
+            //updating hp of monster
+            if (monster !== "monster3_c" && parseInt(document.querySelector('#mon_hp').value, 10) <= 0) {
+                alert("You defeated the monster! Moving on to the next one");
+                $.ajax({
+                    type: "GET",
+                    url: "/fight",
+                    success: function() {
+                        console.log("Moving on to next monster");
+                        $(".monster-info").load(location.href + " .monster-info");
+                    }
+                });
+            } else if (monster == "monster3_c" && parseInt(document.querySelector('#mon_hp').value, 10) <= 0) {
+                let result = confirm("Would you like to restart?");
+                if (result == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/finish",
+                        success: function() {
+                            console.log("Restarting Game")
+                            alert("You have restarted the game. You will have 5 more HP and MP, and monsters will be stronger!")
+                            window.location.replace("http://71043794-2993-4b83-9e82-c4679927f0cc-ide.cs50.xyz/");
+                        }
+                    });
+                }
+            }
+
+            else {
+
+                //setting the value for the button using the dice function in script_2.js
+                document.querySelector('#mon_attack').value = dice();
+
+                //making div move
+                myMove(document.getElementById("mon_box"));
+
+                $.ajax({
+                    type: "POST",
+                    url: "/mon_attack",
+                    data: {mon_attack: $('#mon_attack').val()},
+                    success: function() {
+                        console.log("Reloaded char info");
+                        document.getElementById('mon-results').innerHTML = "{{ monster }} damages you for " + document.querySelector('#mon_attack').value+ "!";
+                        $(".character-info").load(location.href + " .character-info");
+                        if (parseInt(document.querySelector('#hp').value, 10) <= 0) {
+                            $.ajax({
+                                type: "GET",
+                                url: "/",
+                                success: function() {
+                                    document.getElementById('char-results').innerHTML = "You died!";
+                                    console.log("Character died, returning to home page");
+                                    window.location.replace("http://71043794-2993-4b83-9e82-c4679927f0cc-ide.cs50.xyz/");
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        document.querySelector('#skill').addEventListener('click', function(event) {
+
+            //prevent form from submitting and refreshing page
+            event.preventDefault();
+
+            if (parseInt(document.querySelector("#mp").value, 10) >= 3) {
+
+                //setting the value for the buttons using the dice function in script_2.js
+                document.querySelector('#skill').value = dice();
+
+                //obtaining skill value and using it to update
+                $.ajax({
+                    type: "POST",
+                    url: "/fight",
+                    data: { '{{ skill[0]["skill_name"]}}': $('#skill').val()},
+                    success: function() {
+                        console.log("Reloaded info");
+                        if (document.querySelector("#skill").innerHTML == "Heal") {
+
+                            //changing color of div
+                            heal(document.querySelector('#char_box'));
+
+                            $(".character-info").load(location.href + " .character-info");
+                            document.getElementById('char-results').innerHTML = "You healed yourself for " + document.querySelector('#skill').value*2 + "! Costs 3 MP.";
+                        } else {
+
+                            //changing color of div
+                            slash(document.querySelector('#char_box'));
+
+                            myMove(document.getElementById("char_box"));
+                            $(".monster-info").load(location.href + " .monster-info");
+                            document.getElementById('char-results').innerHTML = "You slashed the monster for " + document.querySelector('#skill').value*2 + "! Costs 3 MP.";
+                        }
+                        pause_submit($("#form1"));
+                    }
+                });
+            } else {
+                alert("You don't have enough mana!")
+            }
+        });
+
+        document.querySelector('#char_attack').addEventListener('click', function(event) {
+
+            event.preventDefault();
+
+            if (parseInt(document.querySelector('#hp').value, 10) > 0 ) {
+
+                //prevent form from submitting and refreshing page
+
+                //setting the value for the buttons using the dice function in script_2.js
+                document.querySelector('#char_attack').value = dice();
+
+                //making div move
+                myMove(document.getElementById("char_box"));
+
+                //updating hp of monster
+                $.ajax({
+                    type: "POST",
+                    url: "/fight",
+                    data: {char_attack: $('#char_attack').val()},
+                    success: function() {
+                        console.log("Reloaded monster info");
+                        $(".monster-info").load(location.href + " .monster-info");
+                        document.getElementById('char-results').innerHTML = "You did " + document.querySelector('#char_attack').value + " damage!";
+                        pause_submit($("#form1"));
+                    }
+                });
+            }
+        });
+    })
+</script>
+{% endblock %}

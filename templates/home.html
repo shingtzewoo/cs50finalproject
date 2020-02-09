@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<h1>Your Character</h1>
+<section class='home'>
+    <ul class="list-group">
+        {% for stats in character %}
+            {% for key, value in stats.items() %}
+                {% if key == 'map_level' %}
+                    <li class="list-group-item">Current Level Location: {{value}}</li>
+                {% else %}
+                    <li class="list-group-item"> {{key.capitalize()}}: {{value}}</li>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+            <li class="list-group-item">Class: {{ char_class[0]["classes"]}}</li></li>
+        {% if skill[0]["skill_name"] == "heal" %}
+            <li class="list-group-item">You own a skill called <strong>{{skill[0]["skill_name"] }}</strong> which is a magic spell that allows you to heal yourself by the number on the dice that was rolled multiplied by 2. It consumes 3 mana.</li>
+        {% elif skill[0]["skill_name"] == "slash" %}
+             <li class="list-group-item">You own a skill called <strong>{{skill[0]["skill_name"] }}</strong> which is a physical attack that allows you to damage an enemy by the number on the dice that was rolled multiplied by 2. It consumes 3 mana.</li>
+        {% endif %}
+    </ul>
+    <br>
+    <button type="submit" id="prev" name="next" class="btn btn-primary">PREVIOUS CHARACTER</button>
+    <button type="submit" id="next" name="next" class="btn btn-primary">NEXT CHARACTER</button>
+    <br>
+    <br>
+    <button type="button" name="delete" class="btn btn-danger">DELETE</button>
+</section>
+<script>
+$(document).ready(function() {
+
+    document.querySelector('#next').addEventListener('click', function(event) {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/char",
+            data: {next: 'next'},
+            success: function() {
+                console.log("Going to next character");
+                $(".list-group").load(location.href + " .list-group");
+            }
+        });
+    });
+
+    document.querySelector('#prev').addEventListener('click', function(event) {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/char",
+            data: {prev: 'prev'},
+            success: function() {
+                console.log("Going to previous character");
+                $(".list-group").load(location.href + " .list-group");
+            }
+        });
+    });
+})
+</script>
+{% endblock %}
